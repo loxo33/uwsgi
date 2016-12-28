@@ -1,0 +1,26 @@
+# <%= @appname %> uwsgi ini file
+[uwsgi]
+uid             = <%= @chdir_uid %>
+gid             = <%= @chdir_gid %>
+# Django-related settings
+plugins         = python
+# the base directory (full path)
+chdir           = /var/venv/%n/
+# Django's wsgi file
+module          = <%= @wsgi_module  %>
+# the virtualenv (full path)
+home            = /var/venv/%n/
+pythonpath      = /var/venv/%n/source/
+logto           = /var/log/uwsgi/%n.log
+# the socket (use the full path to be safe)
+socket          = /var/tmp/%n.sock
+chmod-socket    = 664
+# Processes and Threads for concurrency.
+enable-threads  = true
+processes       = <%= (2 * (@processors.count)).to_i  %>
+threads         = <%= (5 * (@processors.count)).to_i %>
+thunder-lock    = enabled
+# Process Reclamation
+harikiri        = 60
+# clear environment on exit
+vacuum          = true
